@@ -5,117 +5,70 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LiveScores.mainUI.UpdateController">
+<AnchorPane id="AnchorPane" prefHeight="465.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LiveScores.mainUI.UpdateController">
     <stylesheets>
         <URL value="@UpdateStyle.css" />
     </stylesheets>
    <children>
-      <Button layoutX="46.0" layoutY="105.0" mnemonicParsing="false" onAction="#setTossResult" prefHeight="46.0" prefWidth="219.0" text="Set toss result">
+      <Button layoutX="46.0" layoutY="100.0" mnemonicParsing="false" onAction="#setTossResult" prefHeight="51.0" prefWidth="219.0" text="Set toss result">
          <font>
-            <Font name="Cambria" size="24.0" />
+            <Font name="Cambria" size="28.0" />
          </font>
       </Button>
-      <Button fx:id="scorebutton__2" layoutX="607.0" layoutY="101.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="71.0" text="2">
-         <font>
-            <Font name="Georgia Bold Italic" size="36.0" />
-         </font>
-      </Button>
-      <Button fx:id="scorebutton__3" layoutX="681.0" layoutY="101.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="69.0" text="3">
-         <font>
-            <Font name="Georgia Bold Italic" size="36.0" />
-         </font>
-      </Button>
-      <Button fx:id="scorebutton__4" layoutX="532.0" layoutY="175.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="72.0" text="4">
-         <font>
-            <Font name="Georgia Bold Italic" size="36.0" />
-         </font>
-      </Button>
-      <Button fx:id="scorebutton__5" layoutX="607.0" layoutY="175.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="71.0" text="5">
-         <font>
-            <Font name="Cambria Bold Italic" size="36.0" />
-         </font>
-      </Button>
-      <Button fx:id="scorebutton__6" layoutX="681.0" layoutY="175.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="72.0" text="6">
-         <font>
-            <Font name="Georgia Bold Italic" size="36.0" />
-         </font>
-      </Button>
-      <Button fx:id="__noball" layoutX="608.0" layoutY="250.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="69.0" text="N">
+      <Button fx:id="__noball" layoutX="608.0" layoutY="250.0" mnemonicParsing="false" onAction="#__noball_clicked" prefHeight="68.0" prefWidth="69.0" text="N">
          <font>
             <Font name="Cambria Bold Italic" size="35.0" />
          </font>
       </Button>
-      <Button fx:id="__dotball" layoutX="533.0" layoutY="250.0" mnemonicParsing="false" text="D">
+      <Button fx:id="__dotball" layoutX="533.0" layoutY="250.0" mnemonicParsing="false" onAction="#__dotball_clicked" text="D">
          <font>
             <Font name="Cambria Bold Italic" size="35.0" />
          </font>
       </Button>
-      <Button fx:id="__wideball" layoutX="683.0" layoutY="250.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="69.0" text="W">
+      <Button fx:id="__wideball" layoutX="683.0" layoutY="250.0" mnemonicParsing="false" onAction="#__wideball_clicked" prefHeight="68.0" prefWidth="69.0" text="W">
          <font>
             <Font name="Cambria Bold Italic" size="30.0" />
          </font>
       </Button>
-      <ComboBox layoutX="534.0" layoutY="324.0" prefHeight="50.0" prefWidth="219.0" promptText="Extra runs" fx:id="xtra_runs" />
-      <ComboBox fx:id="__wicket" layoutX="642.0" layoutY="382.0" prefHeight="50.0" prefWidth="111.0" promptText="Wicket" />
-      <Button layoutX="534.0" layoutY="438.0" mnemonicParsing="false" onAction="#____update" prefHeight="51.0" prefWidth="219.0" text="Update">
+      <Button layoutX="44.0" layoutY="376.0" mnemonicParsing="false" onAction="#____update" prefHeight="51.0" prefWidth="442.0" text="Update">
          <font>
             <Font name="Cambria" size="24.0" />
-         </font>
-      </Button>
-      <Button fx:id="scorebutton__1" layoutX="534.0" layoutY="101.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="69.0" text="1">
-         <font>
-            <Font name="Georgia Bold Italic" size="36.0" />
          </font>
       </Button>
       <ComboBox fx:id="batsman__1" layoutX="47.0" layoutY="218.0" prefHeight="50.0" prefWidth="219.0" promptText="Batsman 1" />
       <ComboBox fx:id="batsman__2" layoutX="47.0" layoutY="275.0" prefHeight="50.0" prefWidth="219.0" promptText="Batsman 2" />
       <ComboBox fx:id="__bowler" layoutX="47.0" layoutY="159.0" prefHeight="50.0" prefWidth="219.0" promptText="Bowler" />
-      <Label layoutX="45.0" layoutY="359.0" text="Target run :">
+      <Label fx:id="__innings" layoutX="348.0" layoutY="235.0" text="&lt;Innings&gt;">
          <font>
             <Font name="Cambria" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="46.0" layoutY="392.0" text="Total run / Wicket :">
-         <font>
-            <Font name="Cambria" size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="46.0" layoutY="427.0" text="Run to win :">
-         <font>
-            <Font name="Cambria" size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="46.0" layoutY="462.0" text="Strike rate :">
-         <font>
-            <Font name="Cambria" size="24.0" />
-         </font>
-      </Label>
-      <Label fx:id="__inningsCount" layoutX="348.0" layoutY="235.0" text="&lt;Innings&gt;">
-         <font>
-            <Font name="Cambria" size="24.0" />
-         </font>
-      </Label>
-      <RadioButton layoutX="534.0" layoutY="384.0" mnemonicParsing="false" text="Batsman 1" />
-      <RadioButton layoutX="534.0" layoutY="407.0" mnemonicParsing="false" text="Batsman 2" />
-      <Label fx:id="__overCount" layoutX="306.0" layoutY="284.0" text="&lt;Over&gt;">
+      <RadioButton fx:id="__b1Out" layoutX="534.0" layoutY="384.0" mnemonicParsing="false" text="Batsman 1">
+         <toggleGroup>
+            <ToggleGroup fx:id="__batsman_wicket" />
+         </toggleGroup></RadioButton>
+      <RadioButton fx:id="__b2Out" layoutX="534.0" layoutY="407.0" mnemonicParsing="false" text="Batsman 2" toggleGroup="$__batsman_wicket" />
+      <Label fx:id="__over" layoutX="306.0" layoutY="284.0" text="&lt;Over&gt;">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label fx:id="__ballCount" layoutX="417.0" layoutY="284.0" text="&lt;Ball&gt;">
+      <Label fx:id="__ball" layoutX="417.0" layoutY="284.0" text="&lt;Ball&gt;">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label fx:id="__team_x" layoutX="324.0" layoutY="79.0" text="&lt;Team X&gt;">
+      <Label fx:id="__team_1" layoutX="324.0" layoutY="79.0" text="&lt;Team 1&gt;">
          <font>
             <Font name="Cambria" size="36.0" />
          </font>
       </Label>
-      <Label fx:id="__team_y" layoutX="324.0" layoutY="162.0" text="&lt;Team Y&gt;">
+      <Label fx:id="__team_2" layoutX="324.0" layoutY="162.0" text="&lt;Team 2&gt;">
          <font>
             <Font name="Cambria" size="36.0" />
          </font>
@@ -130,5 +83,31 @@
             <Font name="Cambria" size="24.0" />
          </font>
       </Label>
+      <TextField layoutX="661.0" layoutY="325.0" prefHeight="35.0" prefWidth="91.0" fx:id="xtra_runs" />
+      <Label layoutX="534.0" layoutY="328.0" text="Extra runs :">
+         <font>
+            <Font name="Cambria" size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="__wicket" layoutX="653.0" layoutY="378.0" mnemonicParsing="false" onAction="#__onWicket" prefHeight="46.0" prefWidth="98.0" text="Out">
+         <font>
+            <Font name="Cambria" size="24.0" />
+         </font>
+      </Button>
+      <Button layoutX="533.0" layoutY="175.0" mnemonicParsing="false" onAction="#__sixer" prefHeight="68.0" prefWidth="219.0" text="Sixer!!!">
+         <font>
+            <Font name="Cambria Italic" size="30.0" />
+         </font>
+      </Button>
+      <Button layoutX="608.0" layoutY="101.0" mnemonicParsing="false" onAction="#__boundry" prefHeight="68.0" prefWidth="144.0" text="Boundry!">
+         <font>
+            <Font name="Cambria Italic" size="24.0" />
+         </font>
+      </Button>
+      <Button layoutX="534.0" layoutY="101.0" mnemonicParsing="false" onAction="#__run_scored" prefHeight="68.0" prefWidth="69.0" text="0">
+         <font>
+            <Font name="Cambria Bold Italic" size="35.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

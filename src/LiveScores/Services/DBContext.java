@@ -12,15 +12,10 @@ import java.sql.*; //DB operations!
  */
 
 public class DBContext {
-    public Connection getConnection(String url,String user,String pass){
+    public Connection getConnection() throws SQLException{
         Connection connection;
-        try{
-            connection = DriverManager.getConnection(url,user,pass);
-            return connection;
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-        return null;
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/livescores","root", "--mySQL");
+        return connection;
     }
     
 }

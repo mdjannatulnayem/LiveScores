@@ -1,6 +1,7 @@
 
 package LiveScores.mainUI;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -36,7 +37,7 @@ public class HomeController implements Initializable {
             stage.setTitle("LiveScores - version 1.0.0");
             stage.setScene(new Scene(parent));
             stage.show();
-        }catch(Exception e){
+        }catch(IOException e){
             System.out.println(e.getMessage());
         }
     }
@@ -51,7 +52,7 @@ public class HomeController implements Initializable {
             stage.setTitle("LiveScores - version 1.0.0");
             stage.setScene(new Scene(parent));
             stage.show();
-        }catch(Exception e){
+        }catch(IOException e){
             System.out.println(e.getMessage());
         }
     }
@@ -66,7 +67,7 @@ public class HomeController implements Initializable {
             stage.setTitle("LiveScores - version 1.0.0");
             stage.setScene(new Scene(parent));
             stage.show();
-        }catch(Exception e){
+        }catch(IOException e){
             System.out.println(e.getMessage());
         }
     }
@@ -81,7 +82,7 @@ public class HomeController implements Initializable {
             stage.setTitle("LiveScores - version 1.0.0");
             stage.setScene(new Scene(parent));
             stage.show();
-        }catch(Exception e){
+        }catch(IOException e){
             System.out.println(e.getMessage());
         }
     }
@@ -96,7 +97,7 @@ public class HomeController implements Initializable {
             stage.setTitle("LiveScores - version 1.0.0");
             stage.setScene(new Scene(parent));
             stage.show();
-        }catch(Exception e){
+        }catch(IOException e){
             System.out.println(e.getMessage());
         }
     }
