@@ -8,13 +8,15 @@ import LiveScores.Services.*;
 
 
 import javafx.collections.*;
+import javafx.scene.control.*;
 import java.net.URL;
+import java.util.ResourceBundle;
 import static java.lang.Integer.parseInt;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import java.util.ResourceBundle;
+
+
 
 
 /**
@@ -24,16 +26,18 @@ import java.util.ResourceBundle;
  */
 public class UpdateController implements Initializable {
 
-    String Match_id;
-    String team1_id;
-    String team2_id;
+    String Match_id,team1_id,team2_id;
     ObservableList<String> allPlayersTeam1 = FXCollections.observableArrayList();
     ObservableList<String> allPlayersTeam2 = FXCollections.observableArrayList();
-    int tossResult = 0;
+    int tossResult = -1;
+    boolean _team1_batting_1st;
     boolean isTossSet = false,_1stInnOver = false,matchOver = false;
     int t1_score = 0,t2_score = 0;
     int inningsCount;
     int overCount = 1,ballCount = 1;
+    int t1wicket = 0,t2wicket = 0;
+    
+    
     
     @FXML
     private Label __over;
@@ -46,10 +50,18 @@ public class UpdateController implements Initializable {
     @FXML
     private Button __dotball;
     @FXML
+    private Button __toss;
+        @FXML
+    private Button __six_button;
+    @FXML
+    private Button __four_button;
+    @FXML
+    private Button __zero_button;
+    @FXML
     private Button __wideball;
     @FXML
     private TextField xtra_runs;
-    @FXML
+        @FXML
     private Button __wicket;
     @FXML
     private ComboBox<String> batsman__1;
@@ -65,8 +77,21 @@ public class UpdateController implements Initializable {
     private Label __team_1;
     @FXML
     private Label __team_2;
+        @FXML
+    private TextArea ____log;
+    @FXML
+    private ToggleGroup __tossOption;
     @FXML
     private ToggleGroup __batsman_wicket;
+    @FXML
+    private RadioButton __tossOpt_1;
+    @FXML
+    private RadioButton __tossOpt_2;
+    @FXML
+    private RadioButton __tossOpt_3;
+    @FXML
+    private RadioButton __tossOpt_4;
+
     
     
     /**
@@ -76,24 +101,24 @@ public class UpdateController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try
         {
+            if(Match_id == null)
+                return;
             DBContext db = new DBContext();
             Connection conn = db.getConnection();
             String Query = "SELECT * FROM allmatch WHERE match_id = '%s'";
             Query = String.format(Query,Match_id);
-            Statement statement;
-            statement = conn.createStatement();
+            Statement statement = conn.createStatement();
             ResultSet result = statement.executeQuery(Query);
             while(result.next()){
                 team1_id = result.getString("contestant1");
-                team2_id = result.getString("contestant2");
-                int innings = result.getInt("innings");
-                __innings.setText(String.format("%s",innings));
                 __team_1.setText(result.getString("name_contestant1"));
+                team2_id = result.getString("contestant2");
                 __team_2.setText(result.getString("name_contestant2"));
+                inningsCount = result.getInt("innings");
             }
+            __innings.setText(String.format("%s:1st",inningsCount));
             __over.setText("1");
             __ball.setText("1");
-            inningsCount = java.lang.Integer.parseInt(__innings.getText());
             Query = "SELECT captain,player1,player2,player3,player4,player5,player6,player7,player8,player9,player10 FROM allteam WHERE team_id = '%s'";
             Query = String.format(Query,team1_id);
             result = statement.executeQuery(Query);
@@ -162,41 +187,101 @@ public class UpdateController implements Initializable {
             while(result.next()){
                 allPlayersTeam2.add(result.getString("name"));
             }
-            
         }
         catch(SQLException | NumberFormatException e){
-            System.out.println(e.getMessage());
+            ____log.appendText("\n"+e.getMessage());
         }
         
         while(!matchOver){
+            if(_team1_batting_1st){
+                if(t1wicket == 9){
+                    _1stInnOver = true;
+                    __innings.setText(String.format("%s:2st",inningsCount));
+                }
+            }
+            else{
+                if(t2wicket == 9)
+                    matchOver = true;
+            }
+            
             if(matchOver){
-                
+                ____log.appendText("\nMatch over!!!\n");
+                __noball.setDisable(true);
+                __dotball.setDisable(true);
+                __wideball.setDisable(true);
+                __zero_button.setDisable(true);
+                __four_button.setDisable(true);
+                __six_button.setDisable(true);
+                __wicket.setDisable(true);
+                try
+                {
+                    DBContext db = new DBContext();
+                    Connection conn = db.getConnection();
+                    String Query = "INSERT INTO allmatch (matchover,matchresult) VALUES ('%s','%s')";
+                    int matchresult;
+                    if(t1_score == t2_score) matchresult = 0;
+                    else matchresult = t1_score > t2_score ? -1:1;
+                    Query = String.format(Query,true,matchresult);
+                    Statement statement = conn.createStatement();
+                    statement.executeUpdate(Query);
+                }catch(SQLException e){
+                    ____log.appendText("\n"+e.getMessage());
+                }
             }
-            if(_1stInnOver){
-                
-            }
+            
+            __over.setText(String.format("%s",overCount));
+            __ball.setText(String.format("%s",ballCount));
         }
     }    
 
     @FXML
     private void setTossResult(ActionEvent event) {
         if(!isTossSet){
+            toss();
+            if(tossResult == -1){return;}
             if(tossResult == 1 || tossResult == 11){
                 __bowler.setItems(allPlayersTeam2);
                 batsman__1.setItems(allPlayersTeam1);
                 batsman__2.setItems(allPlayersTeam1);
+                _team1_batting_1st = true;
             }
             else{
                 __bowler.setItems(allPlayersTeam1);
                 batsman__1.setItems(allPlayersTeam2);
                 batsman__2.setItems(allPlayersTeam2);
+                _team1_batting_1st = false;
             }
             isTossSet = true;
+            __tossOpt_1.setDisable(true);
+            __tossOpt_2.setDisable(true);
+            __tossOpt_3.setDisable(true);
+            __tossOpt_4.setDisable(true);
+            __toss.setDisable(true);
+            try
+            {
+                DBContext db = new DBContext();
+                Connection conn = db.getConnection();
+                String Query = "INSERT INTO allmatch (toss) VALUES ('%s')";
+                Query = String.format(Query,tossResult);
+                Statement statement = conn.createStatement();
+                statement.executeUpdate(Query);
+            }catch(SQLException e){
+                ____log.appendText("\n"+e.getMessage());
+            }
+            
         }
     }
 
     @FXML
     private void ____update(ActionEvent event) {
+        if(isTossSet){
+            if(_team1_batting_1st && !_1stInnOver){
+                
+            }
+            else{
+                
+            }
+        }
     }
     
     private void __matchUpdate(int run){
@@ -223,9 +308,9 @@ public class UpdateController implements Initializable {
                         batsman__2.setItems(allPlayersTeam2);
                     }
                     else{
-                        __bowler.setItems(allPlayersTeam1);
-                        batsman__1.setItems(allPlayersTeam2);
-                        batsman__2.setItems(allPlayersTeam2);
+                        __bowler.setItems(allPlayersTeam2);
+                        batsman__1.setItems(allPlayersTeam1);
+                        batsman__2.setItems(allPlayersTeam1);
                     }
                     _1stInnOver = true;
                 }
@@ -244,7 +329,7 @@ public class UpdateController implements Initializable {
     @FXML
     private void __noball_clicked(ActionEvent event) {
         ballCount -= 1;
-        if(ballCount == 0){
+        if(ballCount == 0 && overCount != 1){
             ballCount = 6;
             overCount -= 1;
         }
@@ -258,6 +343,27 @@ public class UpdateController implements Initializable {
     @FXML
     private void __onWicket(ActionEvent event) {
         __matchUpdate(0);
+        if(__b1Out.isSelected()){
+            String bt = batsman__1.getSelectionModel().getSelectedItem();
+            ObservableList<String> list = batsman__1.getItems();
+            list.remove(bt);
+            batsman__1.getSelectionModel().clearSelection();
+            batsman__1.setItems(list);
+        }
+        if(__b2Out.isSelected()){
+            String bt = batsman__2.getSelectionModel().getSelectedItem();
+            ObservableList<String> list = batsman__2.getItems();
+            list.remove(bt);
+            batsman__2.getSelectionModel().clearSelection();
+            batsman__2.setItems(list);
+        }
+        if(tossResult == 1 || tossResult == 11){
+            t1wicket += 1;
+            
+        }
+        else{
+            t2wicket += 1;
+        }
     }
 
     @FXML
@@ -282,6 +388,24 @@ public class UpdateController implements Initializable {
         int run = parseInt(xtra_runs.getText());
         __matchUpdate(run);
         xtra_runs.setText("");
+    }
+    
+    private void toss(){
+        if(__tossOpt_1.isSelected()){
+            tossResult = 0;
+        }
+        else if(__tossOpt_2.isSelected()){
+            tossResult = 1;
+        }
+        else if(__tossOpt_3.isSelected()){
+            tossResult = 10;
+        }
+        else if(__tossOpt_4.isSelected()){
+            tossResult = 11;
+        }
+        else{
+            tossResult = -1;
+        }
     }
     
 }
